@@ -1,0 +1,40 @@
+{
+  "name": "bandage",
+  "description": "Simple co based test runner using tap",
+  "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "clux/bandage"
+  },
+  "keywords": [
+    "co",
+    "tape",
+    "tap",
+    "yield",
+    "es6",
+    "test",
+    "unit"
+  ],
+  "main": "lib",
+  "scripts": {
+    "test": "node test/spawner.js",
+    "precoverage": "istanbul instrument lib -o lib-cov",
+    "coverage": "istanbul cover test/spawner.js && cat coverage/lcov.info",
+    "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls"
+  },
+  "dependencies": {
+    "co": "^4.5.4",
+    "co-stream": "^0.1.0",
+    "tape": "^4.0.0"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.2",
+    "istanbul-harmony": "^0.3.12",
+    "mz": "^2.0.0"
+  },
+  "bugs": {
+    "url": "http://github.com/clux/bandage/issues"
+  },
+  "license": "MIT"
+}
