@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 
 var runbndg = function (name) {
   return new Promise(function (resolve) {
-    exec('./bin.js test/' + name + '.test.js', function (err, stdout, stderr) {
+    exec('./bin.js test/' + name + '.js', function (err, stdout, stderr) {
       resolve({
         err: err,
         tap: stdout.split('\n')
@@ -13,7 +13,7 @@ var runbndg = function (name) {
 };
 
 test('promise test', function *(t) {
-  var res = yield runbndg('promise');
+  var res = yield runbndg('promise.spawn');
   var expected = [
     'TAP version 13',
     '# promise failure',
@@ -45,7 +45,7 @@ test('promise test', function *(t) {
 });
 
 test('basic test', function *(t) {
-  var res = yield runbndg('basic');
+  var res = yield runbndg('basic.test');
   var expected = [
     'TAP version 13',
     '# setup',
@@ -78,7 +78,7 @@ test('basic test', function *(t) {
 });
 
 test('catch test', function *(t) {
-  var res = yield runbndg('catch');
+  var res = yield runbndg('catch.test');
   var expected = [
     'TAP version 13',
     '# throw is caught',
@@ -97,30 +97,8 @@ test('catch test', function *(t) {
   t.deepEqual(res.tap, expected, 'output identical');
 });
 
-test('error test', function *(t) {
-  var res = yield runbndg('error');
-  var expected = [
-    'TAP version 13',
-    '# error is caught',
-    'ok 1 caught async throw',
-    'ok 2 we reach this',
-    '',
-    '1..2',
-    '# tests 2',
-    '# pass  2',
-    '',
-    '# ok',
-    '',
-    ''
-  ];
-
-  var tap = res.tap;
-  t.deepEqual(res.tap, expected, 'catching and continuing');
-});
-
-
 test('reference error test', function *(t) {
-  var res = yield runbndg('referenceerror');
+  var res = yield runbndg('referenceerror.spawn');
   var expected = [
     'TAP version 13',
     '# reference errors reported',
@@ -163,15 +141,3 @@ test('reference error test', function *(t) {
   t.equal('not ok 2 test exited without ending', expected[20], 'counting 2');
   t.equal(expected[20], res.tap[20], 'not ok 2 line present');
 });
-
-test('verify assert api', function *(t) {
-  try {
-    test('asserting', function (t) {
-      t.ok(true, 'wont reach this');
-    });
-  }
-  catch (e) {
-    t.equal(e.message, 'Test function "asserting" must be a generator function');
-  }
-});
-

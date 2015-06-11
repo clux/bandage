@@ -21,9 +21,9 @@
     "bndg": "bin.js"
   },
   "scripts": {
-    "test": "bndg test/spawner.js",
+    "test": "bndg test/*.test.js",
     "precoverage": "istanbul instrument lib -o lib-cov",
-    "coverage": "istanbul cover bndg test/spawner.js && cat coverage/lcov.info",
+    "coverage": "istanbul cover bndg test/*.test.js && cat coverage/lcov.info",
     "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls"
   },
   "dependencies": {
