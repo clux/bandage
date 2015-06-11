@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "co": "^4.5.4",
-    "co-stream": "^0.1.0",
     "tape": "^4.0.0"
   },
   "devDependencies": {
