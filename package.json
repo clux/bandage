@@ -1,6 +1,6 @@
 {
   "name": "bandage",
-  "description": "Simple co based test runner using tap",
+  "description": "Simple co based test library using tap",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
   "version": "0.1.0",
   "repository": {
@@ -11,8 +11,7 @@
     "co",
     "tape",
     "tap",
-    "yield",
-    "es6",
+    "co-tape",
     "test",
     "unit"
   ],
