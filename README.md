@@ -4,31 +4,33 @@
 [![dependency status](https://david-dm.org/clux/bandage.svg)](https://david-dm.org/clux/bandage)
 [![development dependency status](https://david-dm.org/clux/bandage/dev-status.svg)](https://david-dm.org/clux/bandage#info=devDependencies)
 
-Generator based tape testing.
+Generator based TAP compliant test module.
 
 ## Usage
-Use like if [tape](https://npmjs.org/package/tape) supported generator functions. Ignore `t.end()`. Just write some tests in a generator function, and errors will be caught for you.
+Use like if [tape](https://npmjs.org/package/tape) supported generator functions. Stop thinking about `end/done` calls. Just write some tests in a generator function, and errors will be caught for you.
 
 ```js
 var test = require('bandage');
 
 test('some test', function *(t) {
+  t.equal(5, 2+3, 'addition works');
   var v = yield Promise.resolve(true);
   t.ok(v, 'promise resolved correctly');
 });
 ```
 
-Which you can run with the bundled `bndg` executable:
+Which you can run with the bundled (vowel-free) `bndg` executable:
 
 ```sh
 $ bndg test.js
 TAP version 13
 # some test
-ok 1 promise resolved correctly
+ok 1 addition works
+ok 2 promise resolved correctly
 
-1..1
-# tests 1
-# pass  1
+1..2
+# tests 2
+# pass  2
 
 # ok
 ```
@@ -41,16 +43,16 @@ By default, bandage catches errors and passes them to `t.error` by default, mean
 ```js
 var test = require('bandage');
 
-var throwing = function () {
+var rejecting = function () {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
-      reject(new Error('async throw'));
+      reject(new Error('async reject'));
     });
   });
 };
 
-test('throw is caught', function *(t) {
-  yield throwing();
+test('error is caught', function *(t) {
+  yield rejecting();
   t.fail('we do not reach this');
 });
 ```
@@ -59,15 +61,15 @@ Which will output:
 
 ```sh
 TAP version 13
-# throw is caught
-not ok 1 async throw
+# error is caught
+not ok 1 async reject
   ---
     operator: error
     expected: undefined
-    actual:   [Error: async throw]
+    actual:   [Error: async reject]
     stack:
-      Error: async throw
-        at null._onTimeout (/path/to/test.js:6:14)
+      Error: async reject
+        at null._onTimeout (/path/to/thefileabove.js:6:14)
         at Timer.listOnTimeout (timers.js:89:15)
   ...
 not ok 2 test exited without ending
@@ -81,38 +83,38 @@ not ok 2 test exited without ending
 # fail  2
 ```
 
-If you would like to test that errors are correctly thrown, just catch them yourself:
+If you would like to test that errors are correctly passed through, just catch them yourself:
 
 ```js
 var test = require('bandage');
 
-var throwing = function () {
+var rejecting = function () {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
-      reject(new Error('async throw'));
+      reject(new Error('async reject'));
     });
   });
 };
 
-test('throw is caught', function *(t) {
+test('error is caught', function *(t) {
   try {
-    yield throwing();
-    t.fail('we do not reach this');
+    yield rejecting();
   }
   catch (err) {
-    t.equal(err.message, 'async throw', 'caught async throw');
+    t.equal(err.message, 'async reject', 'caught async reject');
   }
-  t.ok(true, 'we reach this');
+  t.pass('we do reach this');
 });
+
 ```
 
 Which will output:
 
 ```sh
 TAP version 13
-# throw is caught
-ok 1 caught async throw
-ok 2 we reach this
+# error is caught
+ok 1 caught async reject
+ok 2 we do reach this
 
 1..2
 # tests 2
@@ -120,6 +122,8 @@ ok 2 we reach this
 
 # ok
 ```
+
+If something unexpectedly throws in some callback stack that isn't matched by anything, that will still provide a TAP breaking stack trace. That is still a failed test though - there's only so much we can do at this point.
 
 ## Setup and Teardown
 Because tests are executed sequentially in the order of the file, you can create setup tests at the top of your file, and teardown tests at the bottom.
