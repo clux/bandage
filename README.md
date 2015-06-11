@@ -1,4 +1,9 @@
 # bandage
+[![build status](https://secure.travis-ci.org/clux/bandage.svg)](http://travis-ci.org/clux/bandage)
+[![coverage status](http://img.shields.io/coveralls/clux/bandage.svg)](https://coveralls.io/r/clux/bandage)
+[![dependency status](https://david-dm.org/clux/bandage.svg)](https://david-dm.org/clux/bandage)
+[![development dependency status](https://david-dm.org/clux/bandage/dev-status.svg)](https://david-dm.org/clux/bandage#info=devDependencies)
+
 Generator based tape testing.
 
 ## Usage
