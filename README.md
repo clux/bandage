@@ -9,7 +9,7 @@ var test = require('bandage');
 
 test('some test', function *(t) {
   var v = yield Promise.resolve(true);
-  throw new Error('this stack gets shown in trace')
+  throw new Error('this message gets shown in trace')
   t.ok(v, 'not reached');
 });
 ```
@@ -25,17 +25,17 @@ and you will receive
 ```sh
 TAP version 13
 # some test
-not ok 1 this stack gets shown in trace
+not ok 1 this message gets shown in trace
   ---
     operator: error
     expected: undefined
-    actual:   [Error: this stack gets shown in trace]
+    actual:   [Error: this message gets shown in trace]
     stack:
-      Error: this stack gets shown in trace
-        at repl:3:7
+      Error: this message gets shown in trace
+        at ./some.test:5:9
         at GeneratorFunctionPrototype.next (native)
-        at onFulfilled (/home/clux/repos/bandage/node_modules/co/index.js:64:19)
-        at process._tickDomainCallback (node.js:400:9)
+        at onFulfilled (./bandage/node_modules/co/index.js:64:19)
+        at process._tickCallback (node.js:357:9)
   ...
 not ok 2 test exited without ending
   ---
