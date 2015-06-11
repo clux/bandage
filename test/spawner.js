@@ -1,10 +1,52 @@
-//var cp = require('child_process');
-var exec = require('mz/child_process').exec
 var test = require('../');
+var exec = require('child_process').exec;
 
-test('basic test ok', function *(t) {
-  // expected output (paths will be different)
-  [
+var runbndg = function (name) {
+  return new Promise(function (resolve) {
+    exec('./bin.js test/' + name + '.test.js', function (err, stdout, stderr) {
+      resolve({
+        err: err,
+        tap: stdout.split('\n')
+      });
+    });
+  });
+};
+
+test('promise test', function *(t) {
+  var res = yield runbndg('promise');
+  var expected = [
+    'TAP version 13',
+    '# promise failure',
+    'not ok 1 reject error',
+    '  ---',
+    '    operator: error',
+    '    expected: undefined',
+    '    actual:   [Error: reject error]',
+    '    stack:',
+    '      Error: reject error',
+    '        at null._onTimeout (./bandage/test/promise.test.js:6:14)',
+    '        at Timer.listOnTimeout (timers.js:89:15)',
+    '  ...',
+    'not ok 2 test exited without ending',
+    '  ---',
+    '    operator: fail',
+    '  ...',
+    '',
+    '1..2',
+    '# tests 2',
+    '# pass  0',
+    '# fail  2',
+  ];
+  t.equal('    actual:   [Error: reject error]', expected[6], 'counting 1');
+  t.equal(expected[6], res.tap[6], 'actual error line present');
+  t.equal('not ok 2 test exited without ending', expected[12], 'counting 2');
+  t.equal(expected[12], res.tap[12], 'not ok 2 line present');
+  var tap = res.tap;
+});
+
+test('basic test', function *(t) {
+  var res = yield runbndg('basic');
+  var expected = [
     'TAP version 13',
     '# setup',
     'ok 1 asserting in setup',
@@ -29,74 +71,57 @@ test('basic test ok', function *(t) {
     '',
     ''
   ];
-  var stdout = yield exec('node test/basic.test.js');
-  var lines = stdout.toString().split('\n');
-
-  t.equal(lines.indexOf('# tests 10'), 17, '10 tests');
-  t.equal(lines.indexOf('# pass  10'), 18, '10 passes');
-  t.equal(lines.indexOf('# ok'), 20, 'output ok');
+  var tap = res.tap;
+  t.equal(tap.indexOf('# tests 10'), 17, '10 tests');
+  t.equal(tap.indexOf('# pass  10'), 18, '10 passes');
+  t.equal(tap.indexOf('# ok'), 20, 'output ok');
 });
 
-test('error test ok', function *(t) {
-  // expected output (paths will be different)
-  [
+test('catch test', function *(t) {
+  var res = yield runbndg('catch');
+  var expected = [
     'TAP version 13',
-    '# failure shows up normally',
-    'not ok 1 bad',
-    '  ---',
-    '    operator: ok',
-    '    expected: true',
-    '    actual:   false',
-    '    at: onFulfilled (./bandage/node_modules/co/index.js:64:19)',
-    '  ...',
     '# throw is caught',
-    'not ok 2 lets throw an error',
-    '  ---',
-    '    operator: error',
-    '    expected: undefined',
-    '    actual:   [Error: lets throw an error]',
-    '    stack:',
-    '      Error: lets throw an error',
-    '        at ./bandage/test/error.test.js:10:9',
-    '        at GeneratorFunctionPrototype.next (native)',
-    '        at onFulfilled (./bandage/node_modules/co/index.js:64:19)',
-    '        at ./bandage/node_modules/co/index.js:53:5',
-    '        at co (./bandage/node_modules/co/index.js:49:10)',
-    '        at toPromise (./bandage/node_modules/co/index.js:117:63)',
-    '        at next (./bandage/node_modules/co/index.js:98:29)',
-    '        at onFulfilled (./bandage/node_modules/co/index.js:68:7)',
-    '        at ./bandage/node_modules/co/index.js:53:5',
-    '        at co (./bandage/node_modules/co/index.js:49:10)',
-    '  ...',
-    'not ok 3 test exited without ending',
-    '  ---',
-    '    operator: fail',
-    '  ...',
+    'ok 1 caught async throw',
+    'ok 2 we reach this',
     '',
-    '1..3',
-    '# tests 3',
-    '# pass  0',
-    '# fail  3',
+    '1..2',
+    '# tests 2',
+    '# pass  2',
+    '',
+    '# ok',
+    '',
+    '',
+  ];
+  var tap = res.tap;
+  t.deepEqual(res.tap, expected, 'output identical');
+});
+
+test('error test', function *(t) {
+  var res = yield runbndg('error');
+  var expected = [
+    'TAP version 13',
+    '# error is caught',
+    'ok 1 caught async throw',
+    'ok 2 we reach this',
+    '',
+    '1..2',
+    '# tests 2',
+    '# pass  2',
+    '',
+    '# ok',
     '',
     ''
   ];
-  try {
-    var stdout = yield exec('node test/error.test.js');
-  }
-  catch (err) {
-    t.ok(err, err ? err.message : 'command should have failed');
-  }
 
-  // TODO: want to verify stoud as well - but mz/child_process doesnt give you both
-  ////var tap = stdout.split('\n');
-  //t.equal(tap.indexOf('not ok 2 lets throw an error'), 10, 'error caught');
-  //t.equal(tap.indexOf('      Error: lets throw an error'), 16, 'printed nicely');
-  //t.equal(tap.indexOf('not ok 3 test exited without ending'), 28, 'flow halted');
+  var tap = res.tap;
+  t.deepEqual(res.tap, expected, 'catching and continuing');
 });
 
-test('reference errors caught', function *(t) {
-  // expected output (paths will be different)
-  [
+
+test('reference error test', function *(t) {
+  var res = yield runbndg('referenceerror');
+  var expected = [
     'TAP version 13',
     '# reference errors reported',
     'not ok 1 l is not defined',
@@ -108,14 +133,14 @@ test('reference errors caught', function *(t) {
     '      ReferenceError: l is not defined',
     '        at ./bandage/test/referenceerror.test.js:4:8',
     '        at GeneratorFunctionPrototype.next (native)',
+    '        at ./bandage/lib/index.js:7:14',
+    '        at GeneratorFunctionPrototype.next (native)',
     '        at onFulfilled (./bandage/node_modules/co/index.js:64:19)',
     '        at ./bandage/node_modules/co/index.js:53:5',
     '        at co (./bandage/node_modules/co/index.js:49:10)',
-    '        at toPromise (./bandage/node_modules/co/index.js:117:63)',
-    '        at next (./bandage/node_modules/co/index.js:98:29)',
-    '        at onFulfilled (./bandage/node_modules/co/index.js:68:7)',
-    '        at ./bandage/node_modules/co/index.js:53:5',
-    '        at co (./bandage/node_modules/co/index.js:49:10)',
+    '        at Test.wrapped (./bandage/lib/index.js:6:5)',
+    '        at Test.bound [as _cb] (./bandage/node_modules/tape/lib/test.js:62:32)',
+    '        at Test.run (./bandage/node_modules/tape/lib/test.js:75:10)',
     '  ...',
     'not ok 2 test exited without ending',
     '  ---',
@@ -127,60 +152,26 @@ test('reference errors caught', function *(t) {
     '# pass  0',
     '# fail  2',
     '',
-    ''
+    '',
   ];
 
-  try {
-    var stdout = yield exec('node test/referenceerror.test.js');
-  }
-  catch (err) {
-    t.ok(err, err ? err.message : 'command should have failed');
-  }
+  var tap = res.tap;
+  t.equal(res.tap.length, expected.length, 'got same-ish output');
 
-  // TODO: want to verify stdout as well - but mz/child_process doesnt give you both
-  //var tap = stdout.toString().split('\n');
-  //t.equal(tap.indexOf('not ok 1 l is not defined'), 2, 'error caught');
-  //t.equal(tap.indexOf('      ReferenceError: l is not defined'), 8, 'printed');
-  //t.equal(tap.indexOf('not ok 2 test exited without ending'), 20, 'flow halted');
+  t.equal('      ReferenceError: l is not defined', expected[8], 'counting 1');
+  t.equal(expected[8], res.tap[8], 'actual error line present');
+  t.equal('not ok 2 test exited without ending', expected[20], 'counting 2');
+  t.equal(expected[20], res.tap[20], 'not ok 2 line present');
 });
 
-test('promise rejections caught', function *(t) {
-  // expected output (paths will be different)
-  [
-    'TAP version 13',
-    '# promise rejection caught',
-    'not ok 1 hi there',
-    '  ---',
-    '    operator: error',
-    '    expected: undefined',
-    '    actual:   [Error: hi there]',
-    '    stack:',
-    '      Error: hi there',
-    '        at null._onTimeout (./bandage/test/promise.test.js:6:14)',
-    '        at Timer.listOnTimeout (timers.js:89:15)',
-    '  ...',
-    'not ok 2 test exited without ending',
-    '  ---',
-    '    operator: fail',
-    '  ...',
-    '',
-    '1..2',
-    '# tests 2',
-    '# pass  0',
-    '# fail  2',
-    '',
-    ''
-  ];
-
+test('verify assert api', function *(t) {
   try {
-    var stdout = yield exec('node test/promise.test.js');
+    test('asserting', function (t) {
+      t.ok(true, 'wont reach this');
+    });
   }
-  catch (err) {
-    t.ok(err, err ? err.message : 'command should have failed');
+  catch (e) {
+    t.equal(e.message, 'Test function "asserting" must be a generator function');
   }
-  // TODO: want to verify stoud as well - but mz/child_process doesnt give you both
-  //var tap = stdout.split('\n');
-  //t.equal(tap.indexOf('not ok 1 hi there'), 2, 'rejection caught');
-  //t.equal(tap.indexOf('    operator: error'), 4, 'passed on to t.error');
-  //t.equal(tap.indexOf('not ok 2 test exited without ending'), 12, 'flow halted');
 });
+

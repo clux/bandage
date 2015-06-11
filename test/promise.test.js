@@ -3,12 +3,12 @@ var test = require('../');
 var rejectedPromise = function () {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
-      reject(new Error('hi there'));
+      reject(new Error('reject error'));
     }, 200);
   });
 };
 
-test('promise rejection caught', function *(t) {
+test('promise failure', function *(t) {
   var v = yield rejectedPromise();
   t.ok(v, 'not reached');
 });

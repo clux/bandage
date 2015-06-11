@@ -1,4 +1,4 @@
-var test = require('../');
+var test = require('../')
 
 var throwing = function () {
   return new Promise(function (resolve, reject) {
@@ -8,7 +8,7 @@ var throwing = function () {
   });
 };
 
-test('error is caught', function *(t) {
+test('throw is caught', function *(t) {
   try {
     yield throwing();
     t.fail('we do not reach this');
@@ -16,5 +16,5 @@ test('error is caught', function *(t) {
   catch (err) {
     t.equal(err.message, 'async throw', 'caught async throw');
   }
-  t.ok(true, 'we reach this');
+  t.ok(true, 'we reach this')
 });

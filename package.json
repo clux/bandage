@@ -8,6 +8,7 @@
     "url": "clux/bandage"
   },
   "keywords": [
+    "bndg",
     "co",
     "tape",
     "tap",
@@ -16,20 +17,23 @@
     "unit"
   ],
   "main": "lib",
+  "bin": {
+    "bndg": "bin.js"
+  },
   "scripts": {
-    "test": "node test/spawner.js",
+    "test": "bndg test/spawner.js",
     "precoverage": "istanbul instrument lib -o lib-cov",
-    "coverage": "istanbul cover test/spawner.js && cat coverage/lcov.info",
+    "coverage": "istanbul cover bndg test/spawner.js && cat coverage/lcov.info",
     "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "co": "^4.5.4",
+    "glob": "^5.0.10",
     "tape": "^4.0.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
-    "istanbul-harmony": "^0.3.12",
-    "mz": "^2.0.0"
+    "istanbul-harmony": "^0.3.12"
   },
   "bugs": {
     "url": "http://github.com/clux/bandage/issues"
