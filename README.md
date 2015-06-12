@@ -103,6 +103,7 @@ var rejecting = function () {
 };
 
 test('error is caught', function *(t) {
+  t.plan(2);
   try {
     yield rejecting();
   }
