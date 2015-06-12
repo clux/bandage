@@ -7,15 +7,19 @@
 Generator based TAP compliant test module.
 
 ## Usage
-Use like if [tape](https://npmjs.org/package/tape) supported generator functions. Stop thinking about `end/done` calls. Just write some tests in a generator function, and errors will be caught for you.
+Use like if [tape](https://npmjs.org/package/tape) supported generator functions. Just use generator functions when you need asynchronous behaviour, and don't use any `end/done` - test is done when the function is done.
 
 ```js
 var test = require('bandage');
 
-test('some test', function *(t) {
+test('yielding test', function *(t) {
   t.equal(5, 2+3, 'addition works');
   var v = yield Promise.resolve(true);
   t.ok(v, 'promise resolved correctly');
+});
+
+test('plain test', function (t) {
+  t.equal(6, 2*3, 'multiplication works');
 });
 ```
 
@@ -24,13 +28,15 @@ Which you can run with the bundled (vowel-free) `bndg` executable:
 ```sh
 $ bndg test.js
 TAP version 13
-# some test
+# yielding test
 ok 1 addition works
 ok 2 promise resolved correctly
+# plain test
+ok 3 multiplication works
 
-1..2
-# tests 2
-# pass  2
+1..3
+# tests 3
+# pass  3
 
 # ok
 ```

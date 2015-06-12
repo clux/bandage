@@ -1,12 +1,10 @@
 var test = require('../');
 
-test('verify assert api', function *(t) {
-  try {
-    test('asserting', function (t) {
-      t.ok(true, 'wont reach this');
-    });
-  }
-  catch (e) {
-    t.equal(e.message, 'Test function "asserting" must be a generator function');
-  }
+test('generator inpu', function *(t) {
+  t.pass('can pass generators');
+});
+
+// this suppresses a by-default jshint warning so allow the simplification
+test('verify api', function (t) {
+  t.pass('can pass non-generators');
 });

@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 
 var runbndg = function (name) {
   return new Promise(function (resolve) {
-    exec('./bin.js test/' + name + '.js', function (err, stdout, stderr) {
+    exec('./bin.js test/' + name + '.js', function (err, stdout) {
       resolve({
         err: err,
         tap: stdout.split('\n')
@@ -41,7 +41,45 @@ test('promise test', function *(t) {
   t.equal(expected[6], res.tap[6], 'actual error line present');
   t.equal('not ok 2 test exited without ending', expected[12], 'counting 2');
   t.equal(expected[12], res.tap[12], 'not ok 2 line present');
-  var tap = res.tap;
+});
+
+test('throw plain test', function *(t) {
+  var res = yield runbndg('throw.spawn');
+  var expected = [
+    'TAP version 13',
+    '# throwing plain function',
+    'not ok 1 bndg catches this',
+    '  ---',
+    '    operator: error',
+    '    expected: undefined',
+    '    actual:   [Error: bndg catches this]',
+    '    at: Test.tapeTryWrap (./lib/index.js:24:9)',
+    '    stack:',
+    '      Error: bndg catches this',
+    '        at ./test/throw.spawn.js:4:9',
+    '        at Test.tapeTryWrap (./lib/index.js:20:7)',
+    '        at Test.bound [as _cb] (./n_m/tape/lib/test.js:62:32)',
+    '        at Test.run (./n_m/tape/lib/test.js:75:10)',
+    '        at Test.bound [as run] (./n_m/tape/lib/test.js:62:32)',
+    '        at Immediate.next [as _onImmediate] (./n_m/tape/lib/results.js:66:15)',
+    '        at processImmediate [as _immediateCallback] (timers.js:371:17)',
+    '  ...',
+    'not ok 2 test exited without ending',
+    '  ---',
+    '    operator: fail',
+    '  ...',
+    '',
+    '1..2',
+    '# tests 2',
+    '# pass  0',
+    '# fail  2',
+    '',
+    '',
+  ];
+  t.equal('    actual:   [Error: bndg catches this]', expected[6], 'counting 1');
+  t.equal(expected[6], res.tap[6], 'actual error line present');
+  t.equal('not ok 2 test exited without ending', expected[18], 'counting 2');
+  t.equal(expected[18], res.tap[18], 'not ok 2 line present');
 });
 
 test('basic test', function *(t) {
@@ -75,6 +113,7 @@ test('basic test', function *(t) {
   t.equal(tap.indexOf('# tests 10'), 17, '10 tests');
   t.equal(tap.indexOf('# pass  10'), 18, '10 passes');
   t.equal(tap.indexOf('# ok'), 20, 'output ok');
+  t.deepEqual(res.tap, expected, 'identical output');
 });
 
 test('catch test', function *(t) {
@@ -93,9 +132,9 @@ test('catch test', function *(t) {
     '',
     '',
   ];
-  var tap = res.tap;
   t.deepEqual(res.tap, expected, 'output identical');
 });
+
 
 test('reference error test', function *(t) {
   var res = yield runbndg('referenceerror.spawn');
@@ -133,7 +172,6 @@ test('reference error test', function *(t) {
     '',
   ];
 
-  var tap = res.tap;
   t.equal(res.tap.length, expected.length, 'got same-ish output');
 
   t.equal('      ReferenceError: l is not defined', expected[8], 'counting 1');
