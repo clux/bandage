@@ -18,6 +18,8 @@ test('block', function *(t) {
   var a = yield slow();
   t.ok(a, 'waited for slow');
   t.ok(!this.b, 'next test has not started yet');
+  var a2 = yield slow();
+  t.ok(a2, 'waited for slow again');
 });
 
 test('basic', function *(t) {
@@ -29,7 +31,7 @@ test('basic', function *(t) {
   t.equal(this.a, 'hi','can read setup state');
 });
 
-test('tests', function *(t) {
+test('tests', function (t) {
   t.ok(true, 'asserting in teardown');
   t.equal(this.a, 'hi','state set through setup');
 });
