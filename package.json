@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
-    "istanbul-harmony": "^0.3.12"
+    "istanbul": "^0.3.22"
   },
   "bugs": {
     "url": "http://github.com/clux/bandage/issues"

@@ -1,6 +1,9 @@
 language: node_js
 node_js:
-  - iojs
+  - 4
+
+notifications:
+  email: false
 
 before_script:
   - npm link
