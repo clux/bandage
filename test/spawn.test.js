@@ -6,7 +6,7 @@ var runbndg = function (name) {
     exec('./bin.js test/' + name + '.js', function (err, stdout) {
       resolve({
         err: err,
-        tap: stdout.split('\n')
+        tap: stdout.split('\n'),
       });
     });
   });
@@ -37,6 +37,7 @@ test('promise test', function *(t) {
     '# pass  0',
     '# fail  2',
   ];
+
   t.equal('    actual:   [Error: reject error]', expected[6], 'counting 1');
   t.equal(expected[6], res.tap[6], 'actual error line present');
   t.equal('not ok 2 test exited without ending', expected[12], 'counting 2');
@@ -108,7 +109,7 @@ test('basic test', function *(t) {
     '',
     '# ok',
     '',
-    ''
+    '',
   ];
   var tap = res.tap;
   t.equal(tap.indexOf('# tests 11'), 18, '10 tests');

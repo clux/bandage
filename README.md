@@ -4,7 +4,7 @@
 [![dependency status](https://david-dm.org/clux/bandage.svg)](https://david-dm.org/clux/bandage)
 [![development dependency status](https://david-dm.org/clux/bandage/dev-status.svg)](https://david-dm.org/clux/bandage#info=devDependencies)
 
-Generator based TAP compliant test module.
+Tape with generator functions.
 
 ## Usage
 Use like if [tape](https://npmjs.org/package/tape) supported generator functions. Just use generator functions when you need asynchronous behaviour, and don't use any `end/done` - test is done when the function is done.
