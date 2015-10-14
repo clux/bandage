@@ -29,7 +29,7 @@
   "dependencies": {
     "co": "^4.5.4",
     "glob": "^5.0.10",
-    "tape": "^4.0.0"
+    "tape": "4.0.3"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
