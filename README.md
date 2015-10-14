@@ -12,13 +12,13 @@ Use like if [tape](https://npmjs.org/package/tape) supported generator functions
 ```js
 var test = require('bandage');
 
-test('yielding test', function *(t) {
+test('yielding test', function *T(t) {
   t.equal(5, 2+3, 'addition works');
   var v = yield Promise.resolve(true);
   t.ok(v, 'promise resolved correctly');
 });
 
-test('plain test', function (t) {
+test('plain test', function T(t) {
   t.equal(6, 2*3, 'multiplication works');
 });
 ```
@@ -57,7 +57,7 @@ var rejecting = function () {
   });
 };
 
-test('error is caught', function *(t) {
+test('error is caught', function *T(t) {
   yield rejecting();
   t.fail('we do not reach this');
 });
@@ -102,7 +102,7 @@ var rejecting = function () {
   });
 };
 
-test('error is caught', function *(t) {
+test('error is caught', function *T(t) {
   t.plan(2);
   try {
     yield rejecting();
@@ -134,3 +134,8 @@ If something unexpectedly throws in some callback stack that isn't matched by an
 
 ## Setup and Teardown
 Because tests are executed sequentially in the order of the file, you can create setup tests at the top of your file, and teardown tests at the bottom.
+
+## Naming Functions
+[All functions passed to bandage should be named](http://eslint.org/docs/rules/func-names). If you do not name your functions, you will not see the line in the `at: ` property in the tap output when something fails.
+
+It doesn't have to be descriptive or unique for each test, it just has to have a name. This is why everything here uses `function *T(t){ /*tests*/ })` or `function T(t) { /* tests*/ })`.

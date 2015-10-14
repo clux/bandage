@@ -8,7 +8,7 @@ var rejectedPromise = function () {
   });
 };
 
-test('promise failure', function *(t) {
+test('promise failure', function *T(t) {
   var v = yield rejectedPromise();
   t.ok(v, 'not reached');
 });

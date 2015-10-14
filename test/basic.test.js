@@ -1,6 +1,6 @@
 var test = require('../');
 
-test('setup', function *(t) {
+test('setup', function *T(t) {
   t.ok(true, 'asserting in setup');
   this.a = yield Promise.resolve('hi');
   t.ok(this.a, 'could yield in setup');
@@ -14,7 +14,7 @@ var slow = function () {
   });
 };
 
-test('block', function *(t) {
+test('block', function *T(t) {
   var a = yield slow();
   t.ok(a, 'waited for slow');
   t.ok(!this.b, 'next test has not started yet');
@@ -22,7 +22,7 @@ test('block', function *(t) {
   t.ok(a2, 'waited for slow again');
 });
 
-test('basic', function *(t) {
+test('basic', function *T(t) {
   this.b = true;
   var v = yield Promise.resolve(false);
   t.ok(!v, 'can use ok');
@@ -31,7 +31,7 @@ test('basic', function *(t) {
   t.equal(this.a, 'hi','can read setup state');
 });
 
-test('tests', function (t) {
+test('tests', function T(t) {
   t.ok(true, 'asserting in teardown');
   t.equal(this.a, 'hi','state set through setup');
 });

@@ -1,5 +1,5 @@
 var test = require('../');
 
-test('throwing plain function', function () {
+test('throwing plain function', function T() {
   throw new Error('bndg catches this');
 });

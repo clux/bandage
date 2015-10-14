@@ -8,7 +8,7 @@ var throwing = function () {
   });
 };
 
-test('throw is caught', function *(t) {
+test('throw is caught', function *T(t) {
   t.plan(2);
   try {
     yield throwing();

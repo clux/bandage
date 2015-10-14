@@ -12,7 +12,7 @@ var runbndg = function (name) {
   });
 };
 
-test('promise test', function *(t) {
+test('promise test', function *T(t) {
   var res = yield runbndg('promise.spawn');
   var expected = [
     'TAP version 13',
@@ -44,7 +44,7 @@ test('promise test', function *(t) {
   t.equal(expected[12], res.tap[12], 'not ok 2 line present');
 });
 
-test('throw plain test', function *(t) {
+test('throw plain test', function *T(t) {
   var res = yield runbndg('throw.spawn');
   var expected = [
     'TAP version 13',
@@ -83,7 +83,7 @@ test('throw plain test', function *(t) {
   t.equal(expected[18], res.tap[18], 'not ok 2 line present');
 });
 
-test('basic test', function *(t) {
+test('basic test', function *T(t) {
   var res = yield runbndg('basic.test');
   var expected = [
     'TAP version 13',
@@ -118,7 +118,7 @@ test('basic test', function *(t) {
   t.deepEqual(res.tap, expected, 'identical output');
 });
 
-test('catch test', function *(t) {
+test('catch test', function *T(t) {
   var res = yield runbndg('catch.test');
   var expected = [
     'TAP version 13',
@@ -138,7 +138,7 @@ test('catch test', function *(t) {
 });
 
 
-test('reference error test', function *(t) {
+test('reference error test', function *T(t) {
   var res = yield runbndg('referenceerror.spawn');
   var expected = [
     'TAP version 13',
@@ -180,4 +180,41 @@ test('reference error test', function *(t) {
   t.equal(expected[8], res.tap[8], 'actual error line present');
   t.equal('not ok 2 test exited without ending', expected[20], 'counting 2');
   t.equal(expected[20], res.tap[20], 'not ok 2 line present');
+});
+
+test('at test', function *T(t) {
+  var res = yield runbndg('at.spawn');
+  var expected = [
+    'TAP version 13',
+    '# nice output plain',
+    'not ok 1 plain',
+    '  ---',
+    '    operator: equal',
+    '    expected: false',
+    '    actual:   true',
+    '    at: T (/home/clux/repos/bandage/test/at.spawn.js:3:5)',
+    '  ...',
+    '# nice output generator',
+    'not ok 2 gen',
+    '  ---',
+    '    operator: equal',
+    '    expected: false',
+    '    actual:   true',
+    '    at: T (/home/clux/repos/bandage/test/at.spawn.js:7:5)',
+    '  ...',
+    '',
+    '1..2',
+    '# tests 2',
+    '# pass  0',
+    '# fail  2',
+    '',
+    '',
+  ];
+  t.equal(res.tap.length, expected.length, 'got same-ish output');
+
+  t.ok(expected[7].indexOf('at: T (/') >= 0, 'plain.at T with file');
+  t.ok(expected[7].indexOf('at.spawn.js:3:5)') >= 0, 'plain.at T with line');
+
+  t.ok(expected[15].indexOf('at: T (/') >= 0, 'gen.at T with file');
+  t.ok(expected[15].indexOf('at.spawn.js:7:5)') >= 0, 'gen.at T with line');
 });
