@@ -9,4 +9,5 @@ before_script:
   - npm link
 
 after_script:
-  - npm run coveralls
+  - npm install coveralls
+  - npm run coverage | coveralls

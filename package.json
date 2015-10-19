@@ -22,9 +22,8 @@
   },
   "scripts": {
     "test": "bndg test/*.test.js",
-    "precoverage": "istanbul instrument lib -o lib-cov",
-    "coverage": "istanbul cover bndg test/*.test.js && cat coverage/lcov.info",
-    "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls"
+    "precoverage": "istanbul cover bndg 'test/*.test.js'",
+    "coverage": "cat coverage/lcov.info && rm -rf coverage"
   },
   "dependencies": {
     "co": "^4.5.4",
@@ -32,8 +31,7 @@
     "tape": "4.0.3"
   },
   "devDependencies": {
-    "coveralls": "^2.11.2",
-    "istanbul": "^0.3.22"
+    "istanbul": "^0.4.0"
   },
   "bugs": {
     "url": "http://github.com/clux/bandage/issues"
