@@ -37,8 +37,7 @@ ok 3 multiplication works
 1..3
 # tests 3
 # pass  3
-
-# ok
+# fail  0
 ```
 
 ## Error handling
@@ -66,25 +65,22 @@ Which will output:
 ```sh
 TAP version 13
 # error is caught
-not ok 1 async reject
+not ok 1 Error: async reject
   ---
     operator: error
     expected: undefined
-    actual:   [Error: async reject]
+    actual: [Error: async reject]
+    at: null._onTimeout (/path/to/test.js:6:14)
     stack:
       Error: async reject
-        at null._onTimeout (/path/to/thefileabove.js:6:14)
-        at Timer.listOnTimeout (timers.js:89:15)
-  ...
-not ok 2 test exited without ending
-  ---
-    operator: fail
+        at null._onTimeout (/path/to/test.js:6:14)
+        at Timer.listOnTimeout (timers.js:92:15)
   ...
 
-1..2
-# tests 2
+1..1
+# tests 1
 # pass  0
-# fail  2
+# fail  1
 ```
 
 If you would like to test that errors are correctly passed through, just catch them yourself:
@@ -110,7 +106,6 @@ test('error is caught', function *T(t) {
   }
   t.pass('we do reach this');
 });
-
 ```
 
 Which will output:
@@ -124,16 +119,10 @@ ok 2 we do reach this
 1..2
 # tests 2
 # pass  2
-
-# ok
+# fail  0
 ```
 
 If something unexpectedly throws in some callback stack that isn't matched by anything, that will still provide a TAP breaking stack trace. That is still a failed test though - there's only so much we can do at this point.
 
 ## Setup and Teardown
 Because tests are executed sequentially in the order of the file, you can create setup tests at the top of your file, and teardown tests at the bottom.
-
-## Naming Functions
-[All functions passed to bandage should be named](http://eslint.org/docs/rules/func-names). If you do not name your functions, you will not see the line in the `at: ` property in the tap output when something fails.
-
-It doesn't have to be descriptive or unique for each test, it just has to have a name. This is why everything here uses `function *T(t){ /*tests*/ })` or `function T(t) { /* tests*/ })`.
