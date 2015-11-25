@@ -1,12 +1,20 @@
 #!/usr/bin/env node
 
 var path = require('path');
-var glob = require('glob');
+var test = require('.');
 
-process.argv.slice(2).forEach(function (arg) {
-  glob(arg, function (err, files) {
-    files.forEach(function (file) {
-      require(path.resolve(process.cwd(), file));
-    });
-  });
+/**
+ * bndg executable
+ *
+ * Usage: bndg test/file1.js test/file2.js
+ *
+ * You must rely on your shell to do wildcard expansions:
+ * bndg test/*.test.js
+ * This will pass all js files as arguments to this file
+ */
+
+process.argv.slice(2).forEach((file) => {
+  require(path.resolve(process.cwd(), file));
 });
+
+test.run();

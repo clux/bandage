@@ -4,21 +4,21 @@
 [![dependency status](https://david-dm.org/clux/bandage.svg)](https://david-dm.org/clux/bandage)
 [![development dependency status](https://david-dm.org/clux/bandage/dev-status.svg)](https://david-dm.org/clux/bandage#info=devDependencies)
 
-Tape with generator functions.
+Tape-like test library and test runner for generator functions.
 
 ## Usage
-Use like if [tape](https://npmjs.org/package/tape) supported generator functions. Just use generator functions when you need asynchronous behaviour, and don't use any `end/done` - test is done when the function is done.
+Use like if [tape](https://npmjs.org/package/tape) supported generator functions. Just always pass a generator function to `test` and stop calling `end/done`. The test is always done when the function is done.
 
 ```js
 var test = require('bandage');
 
-test('yielding test', function *T(t) {
+test('yielding test', function *(t) {
   t.equal(5, 2+3, 'addition works');
   var v = yield Promise.resolve(true);
   t.ok(v, 'promise resolved correctly');
 });
 
-test('plain test', function T(t) {
+test('plain test', function *(t) {
   t.equal(6, 2*3, 'multiplication works');
 });
 ```
@@ -40,8 +40,6 @@ ok 3 multiplication works
 
 # ok
 ```
-
-The `t` object is the same `tape` object that's normally passed to [tape](https://npmjs.org/package/tape).
 
 ## Error handling
 By default, bandage catches errors and passes them to `t.error` by default, meaning you will get a test failure with its stack trace. Here's an example:

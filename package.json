@@ -22,13 +22,13 @@
   },
   "scripts": {
     "test": "bndg test/*.test.js",
-    "precoverage": "istanbul cover bndg 'test/*.test.js'",
+    "precoverage": "istanbul cover bndg test/*.test.js",
     "coverage": "cat coverage/lcov.info && rm -rf coverage"
   },
   "dependencies": {
     "co": "^4.5.4",
     "equals": "^1.0.1",
-    "glob": "^5.0.10",
+    "glob": "^6.0.1",
     "object-inspect": "^1.0.2",
     "stack-trace": "0.0.9"
   },
