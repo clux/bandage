@@ -35,19 +35,30 @@ test('Test basic', function *T(t) {
 
 test('Test pass', function *T(t) {
   var inst = new Test('invoke', function *T2(st) {
+    st.plan(5);
     st.ne(1, 2, 'not equals');
     st.not(false, 'false');
-    st.compare((x,y) => x == y, null, undefined, 'null is undefined');
-    st.in(5, [1,2,3,4,5], 'element of array');
+    st.compare((x,y) => x == y, null, undefined, 'eqnull');
+    st.in(5, [1,2,3,4,5], 'elem');
+    yield st.test('subtest', function *(sst) {
+      sst.pass('pass subtest');
+    });
   });
 
   var res = yield inst.run();
+
   var expected = [
     { actual: 1, expected: 2, msg: 'not equals', ok: true, operator: 'ne' },
     { actual: false, expected: false, msg: 'false', ok: true, operator: 'not' },
-    { actual: null, expected: undefined, msg: 'null is undefined', ok: true, operator: 'custom' },
-    { actual: 5, expected: [ 1, 2, 3, 4, 5 ], msg: 'element of array', ok: true, operator: 'in' },
-  ];
+    { actual: null, expected: undefined, msg: 'eqnull', ok: true, operator: 'compare' },
+    { actual: 5, expected: [ 1, 2, 3, 4, 5 ], msg: 'elem', ok: true, operator: 'in' },
+    {
+      msg: 'subtest', ok: true, operator: 'test', results: [
+        { msg: 'pass subtest', ok: true, operator: 'pass' }
+      ]
+    }
+  ]
+
   t.eq(res.results, expected, 'expected results');
   t.ok(res.ok, 'tests passed');
   t.equal(res.operator, 'test', 'run operator');
@@ -56,8 +67,10 @@ test('Test pass', function *T(t) {
   // verify tap messages
   t.eq(tap(expected[0], 1), 'ok 1 not equals', 'tap message 1');
   t.eq(tap(expected[1], 2), 'ok 2 false', 'tap message 2');
-  t.eq(tap(expected[2], 3), 'ok 3 null is undefined', 'tap message 3');
-  t.eq(tap(expected[3], 4), 'ok 4 element of array', 'tap message 4');
+  t.eq(tap(expected[2], 3), 'ok 3 eqnull', 'tap message 3');
+  t.eq(tap(expected[3], 4), 'ok 4 elem', 'tap message 4');
+  t.eq(tap(expected[4], 5), 'ok 5 subtest', 'tap message 5');
+  t.eq(tap(expected[4].results[0], 6), 'ok 6 pass subtest', 'tap message 6');
 });
 
 test('Test ctor', function *heyo(t) {
@@ -85,7 +98,7 @@ test('Test ctor', function *heyo(t) {
     '    actual: [Error: hi]',
     '    stack:',
     '      Error: hi',
-    '        at Test.heyo [as _fn] (./test/test.test.js:64:16)',
+    '        at Test.heyo [as _fn] (./test/test.test.js:77:16)',
     '        skipped here',
     '  ...',
   ]
@@ -94,5 +107,25 @@ test('Test ctor', function *heyo(t) {
     'first 7 failure lines should be equal'
   );
   t.in('at Test.heyo [as _fn]', failEq.split('\n')[7], 'correct frame');
-  t.in('test/test.test.js:64:16', failEq.split('\n')[7], 'correct line');
+  t.in('test/test.test.js:77:16', failEq.split('\n')[7], 'correct line');
+});
+
+test('Test input validation', function *T(t) {
+  var thrower = function *() {
+    new Test('test without function', {});
+  };
+  yield t.throws(thrower, /Test function/, 'need test fn');
+  var thrower2 = function *() {
+    new Test('test without generator', function () {});
+  }
+  yield t.throws(thrower2, /is not a generator/, 'need gen fn');
+
+  var nonthrower = function *() {
+    new Test('working', function *() {});
+  };
+  yield t.notThrows(nonthrower, 'can construct without opts');
+  var nonthrower2 = function *() {
+    new Test('working', {}, function *() {});
+  };
+  yield t.notThrows(nonthrower2, 'can construct with opts');
 });

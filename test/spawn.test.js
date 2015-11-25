@@ -85,7 +85,7 @@ test('basic test', function *T(t) {
     'ok 3 state fetched during first test',
     '# block',
     'ok 4 waited for slow',
-    'ok 5 waited for slow again',
+    'ok 5 pass after waiting for subtest',
     '# basic',
     'ok 6 can use ok',
     'ok 7 can use equal',
