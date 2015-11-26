@@ -1,6 +1,6 @@
 {
   "name": "bandage",
-  "description": "Simple co based test library using tap",
+  "description": "Simple generator based test library",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
   "version": "0.2.3",
   "repository": {

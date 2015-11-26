@@ -166,3 +166,21 @@ test('Test catch mechanics', function *T(t) {
   );
   t.eq(tap(expected, 1).split('\n').slice(-1)[0], failExp[10], 'last line eq');
 });
+
+test('Test catch mechanics', function *T(t) {
+  var inst = new Test('invoke', function *T2(st) {
+    st.plan(1);
+  });
+  var res = yield inst.run();
+  t.false(res.ok, 'tests fail when plan is not met');
+  var expected = {
+    actual: 0,
+    expected: 1,
+    msg: 'number of assertions != plan',
+    ok: false,
+    operator: 'plan'
+  };
+  t.ok(res.results[0].trace, 'plan has trace');
+  delete res.results[0].trace;
+  t.eq(res.results, [expected], 'plan failed');
+});

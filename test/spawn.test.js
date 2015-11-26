@@ -85,20 +85,24 @@ test('basic test', function *T(t) {
     'ok 3 state fetched during first test',
     '# block',
     'ok 4 waited for slow',
-    'ok 5 pass after waiting for subtest',
+    'ok 5 subtest',
+    'ok 6 waited for slow in subtest',
+    'ok 7 pass after waiting for subtest',
     '# basic',
-    'ok 6 can use ok',
-    'ok 7 can use equal',
-    'ok 8 heyo',
+    'ok 8 can use ok',
+    'ok 9 can use equal',
+    'ok 10 heyo',
     '',
-    '1..8',
-    '# tests 8',
-    '# pass  8',
-    '# fail  0',
+    '1..10',
+    '# tests 10',
+    '# pass  10',
+    '# fail  0'
   ];
+
   var tap = res.tap;
-  t.equal(tap.indexOf('# tests 8'), 15, '8 tests');
-  t.equal(tap.indexOf('# pass  8'), 16, '8 passes');
+  //console.log(res.tap)
+  t.in('# tests 10', tap[17], '10 tests');
+  t.in('# pass  10', tap[18], '10 passes');
   t.deepEqual(res.tap, expected, 'identical output');
 });
 

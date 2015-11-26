@@ -23,9 +23,9 @@ test('top-to-bottom', function *T(t) {
 test('block', function *T(t) {
   var a = yield slow();
   t.ok(a, 'waited for slow');
-  t.test('subtest', function *T2(st) {
+  yield t.test('subtest', function *T2(st) {
     var a2 = yield slow();
-    t.ok(a2, 'waited for slow in subtest');
+    st.ok(a2, 'waited for slow in subtest');
   });
   t.pass('pass after waiting for subtest')
 });
