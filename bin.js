@@ -24,8 +24,8 @@ if (argv.t != null) {
  * This will pass all js files as arguments to this file
  */
 
-argv._.forEach((file) => {
+argv._.forEach(file => {
   require(path.resolve(process.cwd(), file));
 });
 
-test.run(testIndices);
+test.run(testIndices, process.exit);

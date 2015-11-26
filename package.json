@@ -21,8 +21,8 @@
     "bndg": "bin.js"
   },
   "scripts": {
-    "test": "bndg test/*.test.js",
-    "precoverage": "istanbul cover bndg test/*.test.js",
+    "test": "./bin.js test/*.test.js",
+    "precoverage": "istanbul cover ./bin.js test/*.test.js",
     "coverage": "cat coverage/lcov.info && rm -rf coverage"
   },
   "dependencies": {
