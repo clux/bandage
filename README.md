@@ -124,5 +124,48 @@ ok 2 we do reach this
 
 If something unexpectedly throws in some callback stack that isn't matched by anything, that will still provide a TAP breaking stack trace. That is still a failed test though - there's only so much we can do at this point.
 
+## Subtests
+Subtests work with bandage. The only difference is you need to `yield` it:
+
+```js
+var test = require('bandage');
+
+var slow = function () {
+  return new Promise(function (res) {
+    setTimeout(function () {
+      res(true);
+    }, 50);
+  });
+};
+
+test('nested tests', function *(t) {
+  var a = yield slow();
+  t.ok(a, 'waited for slow');
+
+  yield t.test('subtest', function *(st) {
+    var b = yield slow();
+    st.ok(b, 'waited for slow in subtest');
+  });
+
+  t.pass('pass after waiting for subtest')
+});
+```
+
+Which outputs
+
+```bash
+TAP version 13
+# nested tests
+ok 1 waited for slow
+ok 2 subtest
+ok 3 waited for slow in subtest
+ok 4 pass after waiting for subtest
+
+1..4
+# tests 4
+# pass  4
+# fail  0
+```
+
 ## Setup and Teardown
 Because tests are executed sequentially in the order of the file, you can create setup tests at the top of your file, and teardown tests at the bottom.

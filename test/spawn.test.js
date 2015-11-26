@@ -100,7 +100,6 @@ test('basic test', function *T(t) {
   ];
 
   var tap = res.tap;
-  //console.log(res.tap)
   t.in('# tests 10', tap[17], '10 tests');
   t.in('# pass  10', tap[18], '10 passes');
   t.deepEqual(res.tap, expected, 'identical output');
