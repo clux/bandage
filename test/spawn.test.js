@@ -96,7 +96,6 @@ test('basic test', function *T(t) {
     '1..10',
     '# tests 10',
     '# pass  10',
-    '# fail  0'
   ];
 
   var tap = res.tap;
@@ -116,7 +115,6 @@ test('catch test', function *T(t) {
     '1..2',
     '# tests 2',
     '# pass  2',
-    '# fail  0',
   ];
   t.deepEqual(res.tap, expected, 'output identical');
 });
