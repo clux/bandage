@@ -27,7 +27,7 @@ test('block', function *T(t) {
     var a2 = yield slow();
     st.ok(a2, 'waited for slow in subtest');
   });
-  t.pass('pass after waiting for subtest')
+  t.pass('pass after waiting for subtest');
 });
 
 test('basic', function *T(t) {
@@ -35,4 +35,6 @@ test('basic', function *T(t) {
   t.ok(!v, 'can use ok');
   t.equal(v, false, 'can use equal');
   t.ok(true, 'heyo');
+  t.type({}, 'object', 'typeof check');
+  t.instance(function(){}, Function, 'instance check');
 });

@@ -92,15 +92,17 @@ test('basic test', function *T(t) {
     'ok 8 can use ok',
     'ok 9 can use equal',
     'ok 10 heyo',
+    'ok 11 typeof check',
+    'ok 12 instance check',
     '',
-    '1..10',
-    '# tests 10',
-    '# pass  10',
+    '1..12',
+    '# tests 12',
+    '# pass  12',
   ];
 
   var tap = res.tap;
-  t.in('# tests 10', tap[17], '10 tests');
-  t.in('# pass  10', tap[18], '10 passes');
+  t.in('# tests 12', tap[19], '12 tests');
+  t.in('# pass  12', tap[20], '12 passes');
   t.deepEqual(res.tap, expected, 'identical output');
 });
 

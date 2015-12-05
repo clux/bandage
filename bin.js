@@ -11,7 +11,7 @@ if (argv.h || argv.help) {
 
 var testIndices = [];
 if (argv.t != null) {
-  var testIndices = Array.isArray(argv.t) ? argv.t : [argv.t]
+  testIndices = Array.isArray(argv.t) ? argv.t : [argv.t];
 }
 
 /**
