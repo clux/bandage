@@ -1,10 +1,10 @@
 # bandage
+[![npm status](http://img.shields.io/npm/v/bandage.svg)](https://www.npmjs.org/package/bandage)
 [![build status](https://secure.travis-ci.org/clux/bandage.svg)](http://travis-ci.org/clux/bandage)
 [![coverage status](http://img.shields.io/coveralls/clux/bandage.svg)](https://coveralls.io/r/clux/bandage)
 [![dependency status](https://david-dm.org/clux/bandage.svg)](https://david-dm.org/clux/bandage)
-[![development dependency status](https://david-dm.org/clux/bandage/dev-status.svg)](https://david-dm.org/clux/bandage#info=devDependencies)
 
-Tape-like test library and test runner for generator functions.
+Generator best test harness and test runner.
 
 ## Usage
 Use like if [tape](https://npmjs.org/package/tape) supported generator functions. Just always pass a generator function to `test` and stop calling `end/done`. The test is always done when the function is done.
