@@ -1,5 +1,5 @@
 var test = require('../');
 
-test('generator inpu', function *T(t) {
+test('generator input', function *T(t) {
   t.pass('can pass generators');
 });
