@@ -41,7 +41,7 @@ ok 3 multiplication works
 ```
 
 ## Error handling
-By default, bandage catches errors and passes them to `t.error` by default, meaning you will get a test failure with its stack trace. Here's an example:
+By default, bandage catches errors and reports it as a test failure with a stack trace if you do not catch it, or use `t.throws`. Here's an example:
 
 ```js
 var test = require('bandage');
