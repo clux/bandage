@@ -95,15 +95,17 @@ test('basic test', function *T(t) {
     'ok 11 typeof check',
     'ok 12 instance check',
     'ok 13 this is eqeq null',
+    '# (anonymous)',
+    'ok 14 anonymous test',
     '',
-    '1..13',
-    '# tests 13',
-    '# pass  13',
+    '1..14',
+    '# tests 14',
+    '# pass  14',
   ];
 
   var tap = res.tap;
-  t.in('# tests 13', tap[20], '13 tests');
-  t.in('# pass  13', tap[21], '13 passes');
+  t.in('# tests 14', tap[22], '14 tests');
+  t.in('# pass  14', tap[23], '14 passes');
   t.deepEqual(res.tap, expected, 'identical output');
 });
 

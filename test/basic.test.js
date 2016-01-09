@@ -39,3 +39,7 @@ test('basic', function *T(t) {
   t.instance(function(){}, Function, 'instance check');
   t.null(undefined, 'this is eqeq null');
 });
+
+test(function *(t) {
+  t.ok(true, 'anonymous test');
+});
