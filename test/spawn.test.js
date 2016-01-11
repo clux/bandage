@@ -209,7 +209,7 @@ test('failoutput test', function *T(t) {
     '    operator: null',
     '    expected: null',
     '    actual: []',
-    '    at: T (/home/clux/repos/bandage/test/failoutput.spawn.js:6:9)',
+    '    at: T (./test/failoutput.spawn.js:6:9)',
     '  ...',
     '# not',
     'ok 4 false is not true',
@@ -218,7 +218,7 @@ test('failoutput test', function *T(t) {
     '    operator: not',
     '    expected: false',
     '    actual: true',
-    '    at: T (/home/clux/repos/bandage/test/failoutput.spawn.js:11:5)',
+    '    at: T (./test/failoutput.spawn.js:11:5)',
     '  ...',
   ];
   var num_masks = 0;
