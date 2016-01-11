@@ -196,3 +196,39 @@ test('at test', function *T(t) {
   t.ok(res.tap[15].indexOf('at: T (') >= 0, 'gen.at T with file');
   t.ok(res.tap[15].indexOf('at.spawn.js:7:5)') >= 0, 'gen.at T with line');
 });
+
+test('failoutput test', function *T(t) {
+  var res = yield runbndg('failoutput.spawn');
+  var expected = [
+    'TAP version 13',
+    '# null',
+    'ok 1 true null',
+    'ok 2 true undef',
+    'not ok 3 empty array is not null',
+    '  ---',
+    '    operator: null',
+    '    expected: null',
+    '    actual: []',
+    '    at: T (/home/clux/repos/bandage/test/failoutput.spawn.js:6:9)',
+    '  ...',
+    '# not',
+    'ok 4 false is not true',
+    'not ok 5 true is not not true',
+    '  ---',
+    '    operator: not',
+    '    expected: false',
+    '    actual: true',
+    '    at: T (/home/clux/repos/bandage/test/failoutput.spawn.js:11:5)',
+    '  ...',
+  ];
+  var num_masks = 0;
+  for (var i = 0; i < res.tap.length; i += 1) {
+    // ignore mismatches relating to full path
+    if (res.tap[i].indexOf('    at: T') === 0) {
+      num_masks += 1;
+      res.tap[i] = expected[i];
+    }
+  }
+  t.eq(res.tap.slice(0, expected.length), expected, 'output identical');
+  t.eq(num_masks, 2, 'amount of at lines replaced');
+});
