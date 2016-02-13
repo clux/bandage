@@ -1,6 +1,6 @@
 var test = require('../');
 var Test = test.Test;
-var tap = require('../lib/tap')
+var tap = require('../lib/tap');
 
 test('Test basic', function *T(t) {
   var inst = new Test('invoke', function *T2(st) {
@@ -13,7 +13,7 @@ test('Test basic', function *T(t) {
     { actual: true, expected: true, msg: 'yep', ok: true, operator: 'ok' },
     { actual: 1, expected: 2, msg: 'not right', ok: false, operator: 'eq' },
   ];
-  t.ok(res.results[1].trace, 'error has trace')
+  t.ok(res.results[1].trace, 'error has trace');
   delete res.results[1].trace; // dont verify it fully - done elsewhere
   t.eq(res.results, expected, 'expected results');
   t.false(res.ok, 'tests failed');
@@ -29,7 +29,7 @@ test('Test basic', function *T(t) {
     '    expected: 2',
     '    actual: 1',
     '  ...',
-  ]
+  ];
   t.eq(failEq, failExp.join('\n'), 'tap fail message');
 });
 
@@ -57,7 +57,7 @@ test('Test pass', function *T(t) {
         { msg: 'pass subtest', ok: true, operator: 'pass' }
       ]
     }
-  ]
+  ];
 
   t.eq(res.results, expected, 'expected results');
   t.ok(res.ok, 'tests passed');
@@ -83,7 +83,7 @@ test('Test input validation', function *T(t) {
 
   var thrower2 = function *() {
     new Test('test without generator', function () {});
-  }
+  };
   yield t.throws(thrower2, /is not a generator/, 'need gen fn');
   yield t.throws(thrower2, TypeError, 'need gen fn is TypeError');
 
@@ -143,7 +143,7 @@ test('Test catch mechanics', function *T(t) {
     actual: errorObj,
     trace: 'Test.T [as _fn] (' + __dirname + '/test.test.js:134:18)',
     msg: 'Error: hi there',
-  }
+  };
   t.eq(res.results, [expected], 'caught error in test');
 
   var failExp = [

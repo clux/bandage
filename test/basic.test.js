@@ -36,7 +36,7 @@ test('basic', function *T(t) {
   t.equal(v, false, 'can use equal');
   t.ok(true, 'heyo');
   t.type({}, 'object', 'typeof check');
-  t.instance(function(){}, Function, 'instance check');
+  t.instance(function () {}, Function, 'instance check');
   t.null(undefined, 'this is eqeq null');
 });
 
